@@ -168,6 +168,7 @@ return [
          */
         Centaur\CentaurServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
+		Cviebrock\EloquentSluggable\ServiceProvider::class,
 
         /*
          * Application Service Providers...
