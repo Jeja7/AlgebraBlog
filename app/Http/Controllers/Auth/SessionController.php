@@ -54,15 +54,15 @@ class SessionController extends Controller
 
         // Attempt the Login
         $result = $this->authManager->authenticate($credentials, $remember);
-
+		/*
         // Return the appropriate response
         if(Sentinel::check() && Sentinel::inRole('administrator')) {
           $path = route('admin.dashboard');
         } else {
             $path = route('home');
-        }
+        }*/
 
-        return $result->dispatch($path);
+        return $result->dispatch(route('admin.dashboard'));
 
     }
 
