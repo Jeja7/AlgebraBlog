@@ -34,7 +34,7 @@
 								</td>
                                 <td>{{ $post->user->email }}</td>
                                 <td>
-                                    <a href="{{ route('admin.posts.edit', $post->id) }}" class="btn btn-default">
+                                    <a href="{{ route('admin.posts.edit', $post->id) }}" class="btn btn-default {{ (Sentinel::getUser()->id != $post->user_id) ? 'disabled' : '' }}">
                                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                         Edit
                                     </a>

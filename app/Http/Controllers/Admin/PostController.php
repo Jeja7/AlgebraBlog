@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Sentinel;
-use Cartalyst\Sentinel\Users\IlluminateUserRepository;
 
 
 class PostController extends Controller
@@ -100,11 +100,11 @@ class PostController extends Controller
         $post = Post::find($id);
 		$user_id = Sentinel::getUser()->id;
 		
-		if($user_id == $post->user_id) {
+		/* if($user_id == $post->user_id) { */
         return view('admin.posts.edit', ['post' => $post]);		
-    } else {
+		/*} else {
 		return redirect()->route('admin.posts.index');
-	}
+		}*/
 	}
 
     /**
@@ -114,39 +114,22 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PostRequest $request, $id)
+    public function update(UpdatePostRequest $request, $id)
     {
-        // Validate post data		
-		$result = $this->validate($request, [
-            'title' => 'required',
-            'content' => 'required'
-        ]);
-		
-        // Assemble the updated attributes
-        $attributes = [
-            'title' => $request->get('title', null),
-            'content' => $request->get('content', null),
-        ];		
-        
-         // Fetch the post object
         $post = Post::find($id);
-        if (!$post) {
-            if ($request->ajax()) {
-                return response()->json("Invalid post.", 422);
-            }
-            session()->flash('error', 'Invalid post.');
-            return redirect()->back()->withInput();
-        }
 		
-        // Update the post
-  		$post->updatePost($attributes);
-		 // All done
-        if ($request->ajax()) {
-            return response()->json(['post' => $post], 200);
-        }
-
-        session()->flash('success', "Post '{$post->title}' has been updated.");
-        return redirect()->route('admin.posts.index'); 
+		$input = $request->except(['_token']);
+		
+		$data = array(
+			'title'		=>	trim($input['title']),
+			'content'	=>	$input['content']
+		);
+		
+		$post->updatePost($data);
+		
+		$message = session()->flash('success', 'You have successfully updated a post with ID '.$id.'.');
+		
+		return redirect()->route('admin.posts.index')->withFlashMessage($message);
 
     }
 
