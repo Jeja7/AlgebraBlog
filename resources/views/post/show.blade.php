@@ -28,7 +28,19 @@
 	@if(Sentinel::check())
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-				<h2>Leave a comment!</h2>
+				@foreach ($post->comments as $comment)
+				<div class="media">
+					<div class="media-left">
+							<img class="media-object" src="https://media.npr.org/assets/img/2013/02/07/mrbean072way_wide-bfaafef77349a2c9101d90e3eabe182a7fd1875f.jpg?s=1400" alt="..." height="80">
+					</div>
+					<div class="media-body">
+						<h4 class="media-author">{{ $post->user->email }} commented {{ \Carbon\Carbon::createFromTimeStamp(strtotime($comment->created_at))->diffForHumans() }}</h4>
+						<span>{{ $comment->content }}</span>
+					</div>
+				</div>
+				@endforeach
+					<br>
+					<h2>Leave a comment!</h2>
 					<form accept-charset="UTF-8" role="form" method="post" action="{{ route('post.store') }}">
 				<div class="form-group {{ ($errors->has('content')) ? 'has-error' : '' }}">
                         <textarea class="form-control" name="content" id="post-content" style="height:200px"></textarea>
