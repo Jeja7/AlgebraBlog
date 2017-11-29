@@ -62,7 +62,7 @@ Route::group(['prefix' => 'admin'], function () {
 });
 
 // Post page
-Route::post('/store/', ['as' => 'post.store', 'uses' => 'IndexController@store']);
+Route::post('/comment/store', ['as' => 'comment.store', 'uses' => 'IndexController@storeComment']);
 Route::get('/{slug}', ['as' => 'post.show', 'uses' => 'IndexController@show']);
 
 

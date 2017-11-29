@@ -36,27 +36,25 @@ class IndexController extends Controller
 	public function show($slug)
 	{
 		$post = Post::where('slug', $slug)->first();
-		
+				
 		return view('post.show')->with('post',$post);
 	}
 	
-	 public function store(CommentRequest $request)
+	 public function storeComment(CommentRequest $request)
     {
-		$user_id = Sentinel::getUser()->id;
-        $input = $request->except(['_token']);
 		
 		$data = array(
-			'user_id'	=> $user_id,
-			'post_id'	=>	$input['post_id'],
-			'content'	=>	$input['content']
+			'user_id'	=> 	Sentinel::getUser()->id,
+			'post_id'	=>	$request->get('post_id'),
+			'content'	=>	$request->get('content')			
 		);
 		
 		$comment = new Comment();
-		$comment->saveComment($data);	
-
+		$comment->saveComment($data);		
+		
 		$message = session()->flash('success', 'Thank you for your comment!');
 		
-		/* return redirect()->back()->withFlashMessage($message); */
-		return redirect()->route('index')->withFlashMessage($message);		
+		return redirect()->back()->withFlashMessage($message);	
+		
 }
 }

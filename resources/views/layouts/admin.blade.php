@@ -40,6 +40,7 @@
                             <li class="{{ Request::is('admin/roles*') ? 'active' : '' }}"><a href="{{ route('roles.index') }}">Roles</a></li>
 			           @endif
 					   <li class="{{ Request::is('admin/posts*') ? 'active' : '' }}"><a href="{{ route('admin.posts.index') }}">Posts</a></li>
+					   <li class="{{ Request::is('admin/comments*') ? 'active' : '' }}"><a href="#">Comments <span class="badge">{{ Comments::pendingComments() }}</span></a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         @if (Sentinel::check())

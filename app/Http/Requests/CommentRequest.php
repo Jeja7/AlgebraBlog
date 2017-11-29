@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Post;
 use Sentinel;
 
 class CommentRequest extends FormRequest
@@ -15,7 +14,9 @@ class CommentRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if (Sentinel::check())
+			return true;
+		return false;
     }
 
     /**
@@ -38,7 +39,7 @@ class CommentRequest extends FormRequest
 public function messages()
 {
     return [
-        'content.required'  => 'A post content is required',
+       // 'content.required'  => 'A comment content is required',
     ];
 }
 }

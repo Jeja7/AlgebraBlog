@@ -7,7 +7,7 @@
 @section('content')
     <div class="page-header">
         <div class='btn-toolbar'>
-            <a class="btn btn-primary btn-lg" href="{{ url()->previous() }}">
+            <a class="btn btn-primary btn-lg" href="{{ url('/') }}">
                 <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                 Go Back
             </a>
@@ -28,20 +28,9 @@
 	@if(Sentinel::check())
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-				@foreach ($post->comments as $comment)
-				<div class="media">
-					<div class="media-left">
-							<img class="media-object" src="https://media.npr.org/assets/img/2013/02/07/mrbean072way_wide-bfaafef77349a2c9101d90e3eabe182a7fd1875f.jpg?s=1400" alt="..." height="80">
-					</div>
-					<div class="media-body">
-						<h4 class="media-author">{{ $post->user->email }} commented {{ \Carbon\Carbon::createFromTimeStamp(strtotime($comment->created_at))->diffForHumans() }}</h4>
-						<span>{{ $comment->content }}</span>
-					</div>
-				</div>
-				@endforeach
-					<br>
+
 					<h2>Leave a comment!</h2>
-					<form accept-charset="UTF-8" role="form" method="post" action="{{ route('post.store') }}">
+					<form accept-charset="UTF-8" role="form" method="post" action="{{ route('comment.store') }}">
 				<div class="form-group {{ ($errors->has('content')) ? 'has-error' : '' }}">
                         <textarea class="form-control" name="content" id="post-content" style="height:200px"></textarea>
                         {!! ($errors->has('content') ? $errors->first('content', '<p class="text-danger">:message</p>') : '') !!}
@@ -61,4 +50,29 @@
 			</div>
 		</div>
 	@endif
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+			<h2 id="comments">Comments</h2>
+				@if(count($post->comments()) > 0)
+				@foreach ($post->comments() as $comment)
+				<div class="media">
+					<div class="media-left">
+						<a href="#">
+							<img class="media-object" src="//www.gravatar.com/avatar/{{ md5($comment->user->email) }}?d=mm">
+						</a>
+					</div>
+					<div class="media-body">
+						<h4 class="media-author">{{ $comment->user->email }}</h4>
+						 <small>{{ \Carbon\Carbon::createFromTimeStamp(strtotime($comment->created_at))->diffForHumans() }}</small>
+						<p>{{ $comment->content }}</p>
+					</div>
+				</div>
+				<hr>
+				@endforeach
+				@else
+					<p>No comments!</p>
+				@endif
+				{!! $post->comments()->links('vendor.pagination.comments') !!}
+		</div>
+	</div>
 @stop
