@@ -22,13 +22,23 @@ class CommentsService
 		
 		$posts = Post::where('user_id', $user_id)->count();
 		
-		return $posts; */
+		return $posts; 
 		
 		$user_id = Sentinel::getUser()->id;
 		
 		$comments = Comment::where('user_id', $user_id)->where('status', 0)->count();
 		
-		return $comments;
+		return $comments;*/
+		
+		$posts = Post::where('user_id', Sentinel::getUser()->id)->get();
+		
+		$comments_num = 0;
+		
+		foreach ($posts as $post) {
+			$comments_num += $post->pendingComments->count();
+		}
+		
+		return $comments_num;
 		
 	}	
 }

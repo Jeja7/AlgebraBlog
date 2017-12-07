@@ -54,13 +54,19 @@ class Post extends Model
 		return $this->hasMany(static::$commentsModel, 'post_id')->where('status', 1)->orderBy('created_at','DESC')->paginate(10);
 	}
 	
-	/**
+
+	
+	public function pendingComments()
+	{
+		return $this->hasMany(static::$commentsModel, 'post_id')->where('status', 0);
+	}
+	
+		/**
 	* Save Post
 	* 
 	* @param array $post
 	* @return void
 	*/
-	
 	public function savePost($post = array())
 	{
 		$this->fill($post)->save();
